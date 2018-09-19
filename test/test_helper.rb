@@ -107,6 +107,28 @@ class Minitest::Test
     return (check.to_i == check_digit.to_i)
   end
 
+  def validates_luhn?(sequence, check_digit, extras = {})
+    total = 0
+    sequence.chars.reverse.each_with_index do |c, i|
+      x = c.to_i
+
+      if i.even?
+        x *= 2
+      end
+
+      if x > 9
+        x -= 9
+      end
+
+      total += x
+    end
+
+    check = (total % 10)
+    check = (10 - check) unless (check.zero?)
+
+    return (check.to_i == check_digit.to_i)
+  end
+
   def validates_mod7?(sequence, check_digit, extras = {})
     # standard mod 7 check
     return true if sequence.to_i % 7 == check_digit.to_i
